@@ -1,5 +1,5 @@
 import sqlite3
-import hashlib
+from werkzeug.security import generate_password_hash
 
 # Conexión a la base de datos (se creará automáticamente si no existe)
 conn = sqlite3.connect('example.db')
@@ -17,14 +17,11 @@ c.execute('''
     )
 ''')
 
-# Función para hash de contraseñas
-
-
+# Función para hash de contraseñas con el MISMO método que usa la app
 def hash_password(password):
-    return hashlib.sha256(password.encode()).hexdigest()
+    return generate_password_hash(password)
 
-
-# Insertar un usuario de prueba (las contraseñas están en SHA256 de 'password')
+# Insertar usuarios de prueba (contraseñas: 'password')
 c.execute('''
     INSERT INTO users (username, password, role) VALUES
     ('admin', ?, 'admin'),
